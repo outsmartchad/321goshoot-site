@@ -3,56 +3,385 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>321GoShoot — Beyblade battle community for HK & Taiwan</title>
-  <meta name="description" content="Host live Beyblade battle sessions, find nearby bladers on the map, rate opponents, and build your collection.">
-  <meta property="og:title" content="321GoShoot">
-  <meta property="og:description" content="The community app for Beyblade bladers in Hong Kong and Taiwan.">
+  <title>321GoShoot — Beyblade battle community for Hong Kong & Taiwan</title>
+  <meta name="description" content="Host live Beyblade battle sessions, find nearby bladers on the map, chat during battles, identify your Beyblades with AI, rate opponents, and track your collection. Built for bladers in Hong Kong and Taiwan.">
+  <meta name="theme-color" content="#faf6ec">
+  <meta property="og:title" content="321GoShoot — Beyblade battle community">
+  <meta property="og:description" content="Host battles, find nearby bladers, identify Beyblades with AI, and build your collection. Hong Kong & Taiwan.">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://outsmartchad.github.io/321goshoot-site/">
+  <meta property="og:image" content="https://outsmartchad.github.io/321goshoot-site/assets/01-map.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%23d98b2b'/%3E%3Ccircle cx='32' cy='32' r='10' fill='%23141414'/%3E%3C/svg%3E">
   <style>
     :root {
       --ink: #141414;
+      --ink-soft: #2a2a2a;
       --cream: #faf6ec;
+      --cream-deep: #f1ebda;
       --amber: #d98b2b;
+      --amber-deep: #b46f1a;
       --muted: #6a6a6a;
+      --line: rgba(20,20,20,0.08);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { background: var(--cream); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
-    main { max-width: 680px; margin: 0 auto; padding: 80px 24px 120px; }
-    h1 { font-size: 44px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
-    .tag { color: var(--amber); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; font-size: 12px; margin-bottom: 16px; }
-    p.lead { font-size: 19px; line-height: 1.55; margin-top: 20px; color: var(--ink); }
-    h2 { font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 56px; margin-bottom: 14px; color: var(--muted); }
-    ul.features { list-style: none; display: grid; gap: 10px; }
-    ul.features li { padding: 14px 16px; background: #fff; border-radius: 10px; border: 1px solid rgba(20,20,20,0.06); font-size: 15px; }
-    ul.features li strong { color: var(--ink); }
-    .footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid rgba(20,20,20,0.08); color: var(--muted); font-size: 14px; line-height: 1.7; }
-    .footer a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
-    .footer a:hover { color: var(--amber); }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+    }
+    a { color: inherit; }
+
+    nav.top {
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(250,246,236,0.92);
+      backdrop-filter: saturate(180%) blur(14px);
+      -webkit-backdrop-filter: saturate(180%) blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+    nav.top .inner {
+      max-width: 1080px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 24px;
+    }
+    nav.top .brand { font-weight: 800; letter-spacing: -0.01em; font-size: 18px; }
+    nav.top .brand .dot { color: var(--amber); }
+    nav.top .links a {
+      text-decoration: none; color: var(--muted); font-size: 14px; margin-left: 24px;
+    }
+    nav.top .links a:hover { color: var(--ink); }
+
+    section { padding: 88px 24px; border-bottom: 1px solid var(--line); }
+    section:last-of-type { border-bottom: 0; }
+    .wrap { max-width: 1080px; margin: 0 auto; }
+    .eyebrow {
+      color: var(--amber); font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; font-size: 12px; margin-bottom: 14px;
+    }
+    h1 { font-size: 56px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.05; max-width: 760px; }
+    h2 { font-size: 34px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 12px; }
+    h3 { font-size: 22px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.01em; }
+    p.lead { font-size: 20px; line-height: 1.55; color: var(--ink-soft); max-width: 640px; margin-top: 22px; }
+    p.body { color: var(--ink-soft); margin-top: 10px; max-width: 580px; }
+
+    section.hero { padding-top: 96px; padding-bottom: 64px; }
+    .cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 32px; padding: 14px 24px;
+      background: var(--ink); color: var(--cream);
+      text-decoration: none; border-radius: 999px;
+      font-weight: 700; font-size: 15px;
+      transition: background 120ms ease;
+    }
+    .cta:hover { background: var(--amber-deep); }
+    .cta-secondary {
+      margin-left: 14px; color: var(--ink); text-decoration: underline;
+      text-underline-offset: 4px; font-weight: 600; font-size: 15px;
+    }
+    .region-pills { margin-top: 28px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .region-pills span {
+      padding: 6px 14px; background: var(--cream-deep); border-radius: 999px;
+      font-size: 13px; font-weight: 600; color: var(--ink-soft);
+      border: 1px solid var(--line);
+    }
+
+    .feat { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .feat.reverse { direction: rtl; }
+    .feat.reverse > * { direction: ltr; }
+    .feat .shot {
+      background: var(--cream-deep);
+      border-radius: 28px;
+      padding: 32px;
+      display: flex; justify-content: center;
+      border: 1px solid var(--line);
+    }
+    .feat .shot img {
+      width: 100%; max-width: 280px; height: auto;
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(20,20,20,0.15);
+    }
+    .feat ul { list-style: none; margin-top: 18px; display: grid; gap: 10px; }
+    .feat ul li {
+      padding-left: 22px; position: relative; color: var(--ink-soft); font-size: 15px;
+    }
+    .feat ul li::before {
+      content: ""; position: absolute; left: 0; top: 9px;
+      width: 8px; height: 8px; border-radius: 50%; background: var(--amber);
+    }
+
+    .cards {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 40px;
+    }
+    .card {
+      background: #fff; border: 1px solid var(--line);
+      border-radius: 16px; padding: 24px;
+    }
+    .card .icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: var(--cream-deep); display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px; font-size: 18px;
+    }
+    .card h3 { font-size: 17px; margin-bottom: 6px; }
+    .card p { color: var(--muted); font-size: 14px; line-height: 1.5; }
+
+    details {
+      border-top: 1px solid var(--line); padding: 20px 0;
+    }
+    details[open] summary { color: var(--amber); }
+    summary {
+      cursor: pointer; font-weight: 700; font-size: 17px;
+      list-style: none;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; font-size: 22px; color: var(--muted); font-weight: 400; }
+    details[open] summary::after { content: "–"; }
+    details p { color: var(--ink-soft); margin-top: 12px; font-size: 15px; line-height: 1.6; }
+
+    footer {
+      background: var(--ink); color: var(--cream);
+      padding: 56px 24px 32px;
+    }
+    footer .top-row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
+    footer .brand { font-weight: 800; font-size: 18px; margin-bottom: 8px; }
+    footer p { color: rgba(250,246,236,0.7); font-size: 14px; line-height: 1.7; }
+    footer a { color: var(--cream); text-decoration: underline; text-underline-offset: 3px; }
+    footer a:hover { color: var(--amber); }
+    footer .cols { display: grid; grid-template-columns: repeat(2, minmax(160px,auto)); gap: 24px 48px; }
+    footer .cols h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(250,246,236,0.5); margin-bottom: 8px; font-weight: 700; }
+    footer .cols a { display: block; font-size: 14px; margin-bottom: 6px; }
+    footer .legal {
+      margin-top: 40px; padding-top: 24px;
+      border-top: 1px solid rgba(250,246,236,0.12);
+      font-size: 12px; color: rgba(250,246,236,0.55); line-height: 1.7;
+      max-width: 780px;
+    }
+
+    @media (max-width: 760px) {
+      h1 { font-size: 38px; }
+      h2 { font-size: 26px; }
+      section { padding: 64px 20px; }
+      .feat { grid-template-columns: 1fr; gap: 36px; }
+      .feat.reverse { direction: ltr; }
+      .cards { grid-template-columns: 1fr; }
+      nav.top .links a { margin-left: 16px; }
+    }
   </style>
 </head>
 <body>
-  <main>
-    <div class="tag">321GoShoot</div>
-    <h1>The Beyblade battle community for Hong Kong &amp; Taiwan.</h1>
-    <p class="lead">Host live sessions, find nearby bladers on the map, chat during battles, rate opponents, and track your collection. Built by bladers, for bladers.</p>
 
-    <h2>What's inside</h2>
-    <ul class="features">
-      <li><strong>Live map.</strong> See who's hosting right now.</li>
-      <li><strong>Host &amp; join battles.</strong> Approve players, lock the roster, start when ready.</li>
-      <li><strong>Real-time chat.</strong> Coordinate before and during every session.</li>
-      <li><strong>AI Beyblade identifier.</strong> Photo &rarr; name, powered by Gemini vision.</li>
-      <li><strong>Collection tracker.</strong> Plastic Gen, HMS, Metal, Burst, and X.</li>
-      <li><strong>Post-battle ratings.</strong> Build a reputation the community trusts.</li>
-    </ul>
-
-    <div class="footer">
-      Coming soon to the App Store.<br>
-      Support: <a href="mailto:support.321goshoot@gmail.com">support.321goshoot@gmail.com</a><br>
-      <a href="https://gist.github.com/outsmartchad/fbb68cedcb1ded947c81478de463e1ef">Privacy Policy</a>
-      &nbsp;·&nbsp;
-      <a href="https://gist.github.com/outsmartchad/4ca751c68f99c6dc43efb187f08ed8ee">Terms of Service</a>
+<nav class="top">
+  <div class="inner">
+    <div class="brand">321GoShoot<span class="dot">.</span></div>
+    <div class="links">
+      <a href="#features">Features</a>
+      <a href="#ai">AI</a>
+      <a href="#safety">Safety</a>
+      <a href="#faq">FAQ</a>
     </div>
-  </main>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">For bladers, by bladers</div>
+    <h1>Find battles. Host sessions. Build your Beyblade community.</h1>
+    <p class="lead">321GoShoot is the iOS app for Beyblade bladers across Hong Kong and Taiwan. See live battle sessions on a map, chat with opponents in real time, identify your Beyblades with AI, and track every win.</p>
+    <div>
+      <a class="cta" href="#features">See what's inside &rarr;</a>
+      <a class="cta-secondary" href="mailto:support.321goshoot@gmail.com">Get in touch</a>
+    </div>
+    <div class="region-pills">
+      <span>香港 · Hong Kong</span>
+      <span>台灣 · Taiwan</span>
+      <span>English · 繁體中文 · 简体中文 · 廣東話</span>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <div class="eyebrow">The four pillars</div>
+    <h2>Everything a blader needs, in one app.</h2>
+
+    <div class="feat" style="margin-top: 56px;">
+      <div>
+        <h3>Live battle map</h3>
+        <p class="body">Open the app and see who's hosting a battle near you right now. Pins show the format, skill level, open spots, and host profile — tap to request a spot.</p>
+        <ul>
+          <li>Real-time session pins across HK and TW</li>
+          <li>Filter by format: Burst, X, Metal, Plastic Gen, HMS</li>
+          <li>See host rating and battle history before you join</li>
+        </ul>
+      </div>
+      <div class="shot"><img src="assets/01-map.png" alt="Live battle map showing session pins"></div>
+    </div>
+
+    <div class="feat reverse" style="margin-top: 88px;">
+      <div>
+        <h3>Host a session anywhere</h3>
+        <p class="body">Battling at a park, a shop, or a friend's place? Drop a pin, set the format and spot count, and wait for nearby bladers to request to join. You approve the roster, lock it, and start.</p>
+        <ul>
+          <li>Choose location, format, and max players</li>
+          <li>Approve or decline join requests</li>
+          <li>In-session chat opens automatically when the roster locks</li>
+        </ul>
+      </div>
+      <div class="shot"><img src="assets/02-sessions.png" alt="Sessions list with upcoming and active battles"></div>
+    </div>
+
+    <div class="feat" style="margin-top: 88px;">
+      <div>
+        <h3>Real-time battle chat</h3>
+        <p class="body">Every session gets its own private chat. Coordinate arrival, share launch videos, and talk shop before, during, and after the battle. Photos supported.</p>
+        <ul>
+          <li>Private per-session chat room</li>
+          <li>Photos and reactions supported</li>
+          <li>Notifications when the host starts the battle</li>
+        </ul>
+      </div>
+      <div class="shot"><img src="assets/03-quickmatch.png" alt="Quick match and live chat UI"></div>
+    </div>
+
+    <div class="feat reverse" style="margin-top: 88px;">
+      <div>
+        <h3>Collection &amp; reputation</h3>
+        <p class="body">Track every Beyblade you own — Plastic Gen, HMS, Metal, Burst, X — and show off rare parts on your profile. After each battle, rate your opponents on sportsmanship to build community reputation.</p>
+        <ul>
+          <li>Organize your collection by generation</li>
+          <li>Photo-first collection cards</li>
+          <li>Post-battle rating with sportsmanship score</li>
+        </ul>
+      </div>
+      <div class="shot"><img src="assets/04-profile.png" alt="Player profile with collection and battle history"></div>
+    </div>
+  </div>
+</section>
+
+<section id="ai">
+  <div class="wrap">
+    <div class="eyebrow">AI Beyblade identifier</div>
+    <h2>Don't know what you're holding? Take a photo.</h2>
+    <p class="lead">Snap a Beyblade, and 321GoShoot identifies the parts and generation — combining a curated knowledge base with Google's Gemini 2.5 Flash vision model. Works in all four supported languages.</p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="icon">📸</div>
+        <h3>Photo in, name out</h3>
+        <p>One tap. The app names the Beyblade and its parts with short reasoning.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🧠</div>
+        <h3>Grounded in real data</h3>
+        <p>Our knowledge base covers Plastic Gen, HMS, Metal, Burst, and X. AI fills the long tail.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🌐</div>
+        <h3>Multilingual</h3>
+        <p>Responses match your app language: English, 繁體中文, 简体中文, or 廣東話.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="safety">
+  <div class="wrap">
+    <div class="eyebrow">Safety &amp; moderation</div>
+    <h2>A community that polices itself — with backup.</h2>
+    <p class="lead">Every battle involves real people meeting up. We take moderation seriously: symmetric blocking, in-app reporting on every surface, and a 24-hour SLA on every report.</p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="icon">🚫</div>
+        <h3>Block anyone, anywhere</h3>
+        <p>Blocks are symmetric. Neither side sees the other's profile, sessions, or messages.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🚩</div>
+        <h3>Report on every surface</h3>
+        <p>Every profile, session, image, and chat message has a report action. Reviewed within 24h.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🗑️</div>
+        <h3>Delete anytime</h3>
+        <p>Full account deletion from Settings — removes your data from our servers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap" style="max-width: 760px;">
+    <div class="eyebrow">Frequently asked</div>
+    <h2>Questions bladers ask.</h2>
+
+    <div style="margin-top: 40px;">
+      <details>
+        <summary>Is 321GoShoot free?</summary>
+        <p>Yes. The app is free to download and use. There are no subscriptions and no ads. We may add optional features later but the core — map, sessions, chat, AI identifier, collection, ratings — stays free.</p>
+      </details>
+
+      <details>
+        <summary>Which devices are supported?</summary>
+        <p>iPhone running iOS 16 and later. iPad works but the app is optimized for iPhone. Android is not supported yet.</p>
+      </details>
+
+      <details>
+        <summary>Do I need to be in Hong Kong or Taiwan to use it?</summary>
+        <p>You can download it anywhere, but the active community is currently in HK and TW. Sessions outside those regions may be sparse at launch. The app auto-switches your map to your user region, and you can toggle between HK and TW in Settings.</p>
+      </details>
+
+      <details>
+        <summary>How does the AI identifier work?</summary>
+        <p>You tap "Identify" and the photo is sent over HTTPS to our Cloud Function, which forwards it to Gemini 2.5 Flash. The response (product name + short reasoning) comes back in your chosen language. Photos aren't stored on our side unless you add the Beyblade to your collection.</p>
+      </details>
+
+      <details>
+        <summary>Can I delete my account?</summary>
+        <p>Yes. Profile → Settings (gear icon) → Delete Account. This removes your profile, sessions, photos, and collection from our servers permanently.</p>
+      </details>
+
+      <details>
+        <summary>How do I report a user or content?</summary>
+        <p>Every profile, session, image, and chat message has a three-dot menu with Report and Block actions. Reports are reviewed within 24 hours. Blocks are symmetric — neither side sees the other's content.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="top-row">
+      <div>
+        <div class="brand">321GoShoot<span style="color: var(--amber);">.</span></div>
+        <p>Built by bladers, for bladers.<br>Hong Kong &amp; Taiwan</p>
+        <p style="margin-top: 14px;">Coming soon to the App Store.</p>
+      </div>
+      <div class="cols">
+        <div>
+          <h4>Product</h4>
+          <a href="#features">Features</a>
+          <a href="#ai">AI identifier</a>
+          <a href="#safety">Safety</a>
+          <a href="#faq">FAQ</a>
+        </div>
+        <div>
+          <h4>Support</h4>
+          <a href="mailto:support.321goshoot@gmail.com">Email us</a>
+          <a href="https://gist.github.com/outsmartchad/fbb68cedcb1ded947c81478de463e1ef">Privacy Policy</a>
+          <a href="https://gist.github.com/outsmartchad/4ca751c68f99c6dc43efb187f08ed8ee">Terms of Service</a>
+          <a href="https://gist.github.com/outsmartchad/3985727b31c6fc41909f23b380b4c318">Support page</a>
+        </div>
+      </div>
+    </div>
+    <div class="legal">
+      &copy; 2026 Vincent So. All rights reserved. &middot; 321GoShoot is an independent app by Vincent So and is not affiliated with, endorsed by, or sponsored by Takara Tomy, Hasbro, or any Beyblade rights-holder. &ldquo;Beyblade&rdquo; is a trademark of its respective owner; used here descriptively to identify compatible toys.
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>
